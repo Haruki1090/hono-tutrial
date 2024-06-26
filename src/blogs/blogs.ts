@@ -20,10 +20,6 @@ let blogPosts = [
   },
 ];
 
-app.get("/", (c) => {
-  return c.text("Hello Hono!");
-});
-
 app.get("/", (c) => c.json({ posts: blogPosts }));
 
 app.get("/:id", (c) => {
