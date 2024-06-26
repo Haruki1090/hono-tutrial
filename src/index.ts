@@ -67,4 +67,17 @@ app.put("/posts/:id", async (c) => {
   return c.json(blogPosts[postIndex]);
 });
 
+app.delete("/posts/:id", async (c) => {
+  const id = Number(c.req.param("id"));
+  const postIndex = blogPosts.findIndex((p) => p.id === id);
+
+  if (postIndex === -1) {
+    return c.json({ message: "not found this page" }, 404);
+  }
+
+  blogPosts = blogPosts.filter((p) => p.id !== id);
+
+  return c.json({ message: "Blog Post deleted" });
+});
+
 export default app;
