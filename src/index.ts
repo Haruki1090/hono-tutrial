@@ -50,4 +50,21 @@ app.post("/posts", async (c) => {
   return c.json(newPost, 201);
 });
 
+app.put("/posts/:id", async (c) => {
+  const id = Number(c.req.param("id"));
+  const postIndex = blogPosts.findIndex((p) => p.id === id);
+
+  if (postIndex === -1) {
+    return c.json({ message: "not found this page" }, 404);
+  }
+
+  const { title, content } = await c.req.json<{
+    title: string;
+    content: string;
+  }>();
+  blogPosts[postIndex] = { ...blogPosts[postIndex], title, content };
+
+  return c.json(blogPosts[postIndex]);
+});
+
 export default app;
