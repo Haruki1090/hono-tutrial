@@ -24,9 +24,9 @@ app.get("/", (c) => {
   return c.text("Hello Hono!");
 });
 
-app.get("/posts", (c) => c.json({ posts: blogPosts }));
+app.get("/", (c) => c.json({ posts: blogPosts }));
 
-app.get("/posts/:id", (c) => {
+app.get("/:id", (c) => {
   const id = Number(c.req.param("id"));
   const post = blogPosts.find((p) => p.id === id);
 
@@ -37,7 +37,7 @@ app.get("/posts/:id", (c) => {
   }
 });
 
-app.post("/posts", async (c) => {
+app.post("/", async (c) => {
   const { title, content } = await c.req.json<{
     title: string;
     content: string;
@@ -47,7 +47,7 @@ app.post("/posts", async (c) => {
   return c.json(newPost, 201);
 });
 
-app.put("/posts/:id", async (c) => {
+app.put("/:id", async (c) => {
   const id = Number(c.req.param("id"));
   const postIndex = blogPosts.findIndex((p) => p.id === id);
 
@@ -64,7 +64,7 @@ app.put("/posts/:id", async (c) => {
   return c.json(blogPosts[postIndex]);
 });
 
-app.delete("/posts/:id", async (c) => {
+app.delete("/:id", async (c) => {
   const id = Number(c.req.param("id"));
   const postIndex = blogPosts.findIndex((p) => p.id === id);
 
