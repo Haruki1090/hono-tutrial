@@ -4,26 +4,26 @@ const app = new Hono();
 
 let blogPosts = [
   {
-    id: 1,
+    id: "1",
     title: "Blog1",
-    content: "Blog1 content",
+    content: "Blog1 Posts",
   },
   {
-    id: 2,
+    id: "2",
     title: "Blog2",
-    content: "Blog2 content",
+    content: "Blog2 Posts",
   },
   {
-    id: 3,
+    id: "3",
     title: "Blog3",
-    content: "Blog3 content",
+    content: "Blog3 Posts",
   },
 ];
 
-app.get("/", (c) => c.json({ posts: blogPosts }));
+app.get("/", (c) => c.json({ post: blogPosts }));
 
 app.get("/:id", (c) => {
-  const id = Number(c.req.param("id"));
+  const id = c.req.param("id");
   const post = blogPosts.find((p) => p.id === id);
 
   if (post) {
@@ -38,39 +38,36 @@ app.post("/", async (c) => {
     title: string;
     content: string;
   }>();
-  const newPost = { id: Number(blogPosts.length + 1), title, content };
+  const newPost = { id: String(blogPosts.length + 1), title, content };
   blogPosts = [...blogPosts, newPost];
   return c.json(newPost, 201);
 });
 
 app.put("/:id", async (c) => {
-  const id = Number(c.req.param("id"));
-  const postIndex = blogPosts.findIndex((p) => p.id === id);
+  const id = c.req.param("id");
+  const index = blogPosts.findIndex((p) => p.id === id);
 
-  if (postIndex === -1) {
-    return c.json({ message: "not found this page" }, 404);
+  if (index === -1) {
+    return c.json({ message: "Post not found" }, 404);
   }
 
-  const { title, content } = await c.req.json<{
-    title: string;
-    content: string;
-  }>();
-  blogPosts[postIndex] = { ...blogPosts[postIndex], title, content };
+  const { title, content } = await c.req.json();
+  blogPosts[index] = { ...blogPosts[index], title, content };
 
-  return c.json(blogPosts[postIndex]);
+  return c.json(blogPosts[index]);
 });
 
 app.delete("/:id", async (c) => {
-  const id = Number(c.req.param("id"));
-  const postIndex = blogPosts.findIndex((p) => p.id === id);
+  const id = c.req.param("id");
+  const index = blogPosts.findIndex((p) => p.id === id);
 
-  if (postIndex === -1) {
-    return c.json({ message: "not found this page" }, 404);
+  if (index === -1) {
+    return c.json({ message: "Post not found" }, 404);
   }
 
   blogPosts = blogPosts.filter((p) => p.id !== id);
 
-  return c.json({ message: "Blog Post deleted" });
+  return c.json({ message: "Blog post Deleted" });
 });
 
 export default app;
